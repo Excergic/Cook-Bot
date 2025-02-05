@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import './App.css'
 import image from './images/ChefLogo.png'
 
@@ -20,29 +21,38 @@ function TopBar(){
 }
 
 function Main(){
-  const ingredients = ["potato", "onion", "tomato", "salt"];
+  const [ingredients, setIngredients] = useState([]);
+  //
 
+  const myIngredients = ingredients.map(ingredient => (
+    <li key={ingredient}>{ingredient}</li>
+  ))
+
+  
   function handleSubmit(event){
 
-    event.preventDefault();
-    console.log("Form Submitted");
+    event.preventDefault(); 
+
+    const formData = new FormData(event.currentTarget)
+    const newIngredient = formData.get("ingredient") 
+    setIngredients(prevIngredients => [...prevIngredients, newIngredient])
   }
 
-  return <main>
+  return (<main>
     <form onSubmit={handleSubmit} className='add-ingredient-form'>
       <input
         type="text"
         placeholder=" e.g. Potato, Onion ... "
         aria-label='Add ingredient'
+        name='ingredient' //name is used to get the value of the input
       />
-      <button>Add ingredient</button>
+      <button type='submit'>Add ingredient</button>
     </form>
     <ul>
-      {ingredients.map((ingredient, index) => (
-        <li>{ingredient}</li>
-      ))}
+      {myIngredients}
     </ul>
-  </main>
+
+  </main>);
 }
 
-export default App
+export default App;
